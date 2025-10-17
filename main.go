@@ -467,9 +467,8 @@ func (a *App) handleIndex(w http.ResponseWriter, r *http.Request) {
 
                 if (status.connected) {
                     statusDot.classList.add('connected');
-                    statusText.textContent = 'Tunnel Active';
+                    statusText.textContent = status.status || 'Connected';
                     shareableLink.textContent = status.shareableLink;
-                    displayLocalPort.textContent = status.localPort;
                     shareableBox.classList.add('show');
                 } else {
                     statusDot.classList.remove('connected');
