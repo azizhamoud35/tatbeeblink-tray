@@ -351,7 +351,10 @@ func (a *App) handleIndex(w http.ResponseWriter, r *http.Request) {
 </head>
 <body>
     <div class="container">
-        <h1>🔗 Tatbeeb Link</h1>
+        <div style="text-align: center; margin-bottom: 20px;">
+            <img src="https://i.postimg.cc/rwZ7Sqpd/Tatbeeblink-logo.png" alt="Tatbeeb Link" style="width: 80px; height: 80px; margin: 0 auto 10px;">
+        </div>
+        <h1>Tatbeeb Link</h1>
         <p class="subtitle">Connect your Database to Tatbeeb HIS</p>
         
         <div class="status">
@@ -371,26 +374,17 @@ func (a *App) handleIndex(w http.ResponseWriter, r *http.Request) {
         </div>
 
         <div class="setup-form" id="setupForm">
-            <div class="info-box">
-                <ul>
-                    <li>Tunnel local port to public address</li>
-                    <li>Get shareable link instantly</li>
-                    <li>No firewall configuration</li>
-                    <li>Secure TLS encryption</li>
-                </ul>
-            </div>
+            <button class="button button-primary" onclick="connect()" id="connectBtn">🚀 Start Connection</button>
 
-            <div class="advanced-settings">
-                <button class="button button-secondary" onclick="toggleAdvanced()" id="advancedBtn" style="margin-bottom: 20px;">⚙️ Advanced Settings</button>
-                <div id="advancedPanel" style="display: none;">
+            <div class="advanced-settings" style="margin-top: 20px;">
+                <button class="button button-secondary" onclick="toggleAdvanced()" id="advancedBtn">⚙️ Advanced Settings</button>
+                <div id="advancedPanel" style="display: none; margin-top: 15px;">
                     <div class="form-group">
                         <label>Local Port to Tunnel</label>
                         <input type="number" id="localPort" value="9999" placeholder="9999" min="1" max="65535">
                     </div>
                 </div>
             </div>
-
-            <button class="button button-primary" onclick="connect()" id="connectBtn">🚀 Start Connection</button>
         </div>
 
         <div class="setup-form hidden" id="connectedForm">
