@@ -369,19 +369,16 @@ func (a *App) handleIndex(w http.ResponseWriter, r *http.Request) {
         <div class="error" id="errorBox"></div>
 
         <div class="shareable-box" id="shareableBox">
-            <div class="shareable-label">📋 SHAREABLE LINK</div>
+            <div class="shareable-label">SHAREABLE LINK</div>
             <div class="shareable-link" id="shareableLink"></div>
-            <div class="text-sm text-green-800 mb-3">
-                Forward this address to anyone. Connections to this address will be tunneled to your local port <span id="displayLocalPort">9999</span>.
-            </div>
-            <button class="button button-secondary" onclick="copyLink()">📋 Copy Link</button>
+            <button class="button button-secondary" onclick="copyLink()">Copy Link</button>
         </div>
 
         <div class="setup-form" id="setupForm">
-            <button class="button button-primary" onclick="connect()" id="connectBtn">🚀 Start Connection</button>
+            <button class="button button-primary" onclick="connect()" id="connectBtn">Start Connection</button>
 
-            <div class="advanced-settings" style="margin-top: 20px;">
-                <button class="button button-secondary" onclick="toggleAdvanced()" id="advancedBtn">⚙️ Advanced Settings</button>
+            <div class="advanced-settings" style="margin-top: 10px;">
+                <button class="button button-secondary" onclick="toggleAdvanced()" id="advancedBtn">Advanced Settings</button>
                 <div id="advancedPanel" style="display: none; margin-top: 15px;">
                     <div class="form-group">
                         <label>Local Port to Tunnel</label>
@@ -392,14 +389,7 @@ func (a *App) handleIndex(w http.ResponseWriter, r *http.Request) {
         </div>
 
         <div class="setup-form hidden" id="connectedForm">
-            <div class="info-box">
-                <ul>
-                    <li>Tunnel active</li>
-                    <li>Port forwarding enabled</li>
-                    <li>Share link with anyone</li>
-                </ul>
-            </div>
-            <button class="button button-danger" onclick="disconnect()">⏹️ Stop Tunnel</button>
+            <button class="button button-danger" onclick="disconnect()">Stop Tunnel</button>
         </div>
 
         <div class="footer">
@@ -522,10 +512,10 @@ func (a *App) handleIndex(w http.ResponseWriter, r *http.Request) {
             const btn = document.getElementById('advancedBtn');
             if (panel.style.display === 'none') {
                 panel.style.display = 'block';
-                btn.textContent = '⚙️ Hide Advanced Settings';
+                btn.textContent = 'Hide Advanced Settings';
             } else {
                 panel.style.display = 'none';
-                btn.textContent = '⚙️ Advanced Settings';
+                btn.textContent = 'Advanced Settings';
             }
         }
 
