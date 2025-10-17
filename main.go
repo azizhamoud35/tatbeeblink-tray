@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "embed"
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
@@ -19,6 +20,9 @@ import (
 	"github.com/getlantern/systray"
 	"github.com/hashicorp/yamux"
 )
+
+//go:embed Tatbeeblink-logo.png
+var iconData []byte
 
 const (
 	Version     = "1.0.0"
@@ -782,7 +786,12 @@ func openBrowser(url string) {
 }
 
 func getIcon() []byte {
-	// Try to load the icon from the same directory as the executable
+	// Return the embedded icon data
+	if len(iconData) > 0 {
+		return iconData
+	}
+
+	// Fallback: Try to load from file system
 	exePath, err := os.Executable()
 	if err != nil {
 		log.Printf("Failed to get executable path: %v", err)
@@ -790,15 +799,15 @@ func getIcon() []byte {
 	}
 
 	iconPath := filepath.Join(filepath.Dir(exePath), "Tatbeeblink-logo.png")
-	iconData, err := os.ReadFile(iconPath)
+	fileData, err := os.ReadFile(iconPath)
 	if err != nil {
 		// If not found next to executable, try current directory
-		iconData, err = os.ReadFile("Tatbeeblink-logo.png")
+		fileData, err = os.ReadFile("Tatbeeblink-logo.png")
 		if err != nil {
 			log.Printf("Failed to load icon: %v", err)
 			return []byte{}
 		}
 	}
 
-	return iconData
+	return fileData
 }
