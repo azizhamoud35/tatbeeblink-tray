@@ -273,7 +273,9 @@ func (a *App) handleIndex(w http.ResponseWriter, r *http.Request) {
             display: none;
         }
         .shareable-box.show {
-            display: block;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .shareable-label {
             font-size: 12px;
@@ -282,11 +284,33 @@ func (a *App) handleIndex(w http.ResponseWriter, r *http.Request) {
             margin-bottom: 8px;
         }
         .shareable-link {
+            flex: 1;
             font-size: 18px;
             font-weight: 700;
             color: #065f46;
-            margin-bottom: 12px;
             word-break: break-all;
+        }
+        .copy-icon-btn {
+            background: #10b981;
+            border: none;
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+        .copy-icon-btn:hover {
+            background: #059669;
+            transform: scale(1.05);
+        }
+        .copy-icon-btn svg {
+            width: 20px;
+            height: 20px;
+            color: white;
         }
         .info-box {
             background: #eff6ff;
@@ -370,7 +394,11 @@ func (a *App) handleIndex(w http.ResponseWriter, r *http.Request) {
 
         <div class="shareable-box" id="shareableBox">
             <div class="shareable-link" id="shareableLink"></div>
-            <button class="button button-secondary" onclick="copyLink()">Copy Link</button>
+            <button class="copy-icon-btn" onclick="copyLink()" title="Copy link">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                </svg>
+            </button>
         </div>
 
         <div class="setup-form" id="setupForm">
