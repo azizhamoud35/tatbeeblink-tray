@@ -168,8 +168,8 @@ func (a *App) handleIndex(w http.ResponseWriter, r *http.Request) {
             padding: 40px;
         }
         h1 {
-            color: #2563eb;
-            font-size: 32px;
+            color: #000000;
+            font-size: 38px;
             margin-bottom: 10px;
             text-align: center;
         }
@@ -352,7 +352,7 @@ func (a *App) handleIndex(w http.ResponseWriter, r *http.Request) {
 <body>
     <div class="container">
         <div style="text-align: center; margin-bottom: 20px;">
-            <img src="https://i.postimg.cc/rwZ7Sqpd/Tatbeeblink-logo.png" alt="Tatbeeb Link" style="width: 80px; height: 80px; margin: 0 auto 10px;">
+            <img src="https://i.postimg.cc/rwZ7Sqpd/Tatbeeblink-logo.png" alt="Tatbeeb Link" style="width: 160px; height: 160px; margin: 0 auto 10px;">
         </div>
         <h1>Tatbeeb Link</h1>
         <p class="subtitle">Connect your Database to Tatbeeb HIS</p>
