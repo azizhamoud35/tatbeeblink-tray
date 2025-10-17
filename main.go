@@ -375,15 +375,55 @@ func (a *App) handleIndex(w http.ResponseWriter, r *http.Request) {
         .button-secondary:hover {
             background: #e5e7eb;
         }
+        .lang-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 8px;
+            background: white;
+            border-radius: 8px;
+            padding: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .lang-btn {
+            padding: 6px 12px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            color: #6b7280;
+        }
+        .lang-btn:hover {
+            background: #f3f4f6;
+        }
+        .lang-btn.active {
+            background: #2563eb;
+            color: white;
+        }
+        [dir="rtl"] {
+            direction: rtl;
+        }
+        [dir="rtl"] .lang-switcher {
+            left: 20px;
+            right: auto;
+        }
     </style>
 </head>
 <body>
+    <div class="lang-switcher">
+        <button class="lang-btn active" onclick="setLanguage('en')" id="langEn">EN</button>
+        <button class="lang-btn" onclick="setLanguage('ar')" id="langAr">AR</button>
+    </div>
     <div class="container">
         <div style="text-align: center; margin-bottom: 20px;">
             <img src="https://i.postimg.cc/rwZ7Sqpd/Tatbeeblink-logo.png" alt="Tatbeeb Link" style="width: 160px; height: 160px; margin: 0 auto 10px;">
         </div>
-        <h1>Tatbeeb Link</h1>
-        <p class="subtitle">Connect your Database to Tatbeeb HIS</p>
+        <h1 data-i18n="title">Tatbeeb Link</h1>
+        <p class="subtitle" data-i18n="subtitle">Connect your Database to Tatbeeb HIS</p>
         
         <div class="status">
             <div class="status-dot" id="statusDot"></div>
@@ -394,7 +434,7 @@ func (a *App) handleIndex(w http.ResponseWriter, r *http.Request) {
 
         <div class="shareable-box" id="shareableBox">
             <div class="shareable-link" id="shareableLink"></div>
-            <button class="copy-icon-btn" onclick="copyLink()" title="Copy link">
+            <button class="copy-icon-btn" onclick="copyLink()" id="copyBtn" title="Copy link">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                 </svg>
@@ -402,13 +442,13 @@ func (a *App) handleIndex(w http.ResponseWriter, r *http.Request) {
         </div>
 
         <div class="setup-form" id="setupForm">
-            <button class="button button-primary" onclick="connect()" id="connectBtn">Start Connection</button>
+            <button class="button button-primary" onclick="connect()" id="connectBtn" data-i18n="startConnection">Start Connection</button>
 
             <div class="advanced-settings" style="margin-top: 10px;">
-                <button class="button button-secondary" onclick="toggleAdvanced()" id="advancedBtn">Advanced Settings</button>
+                <button class="button button-secondary" onclick="toggleAdvanced()" id="advancedBtn" data-i18n="advancedSettings">Advanced Settings</button>
                 <div id="advancedPanel" style="display: none; margin-top: 15px;">
                     <div class="form-group">
-                        <label>Local Port to Tunnel</label>
+                        <label data-i18n="localPort">Local Port to Tunnel</label>
                         <input type="number" id="localPort" value="9999" placeholder="9999" min="1" max="65535">
                     </div>
                 </div>
@@ -416,17 +456,97 @@ func (a *App) handleIndex(w http.ResponseWriter, r *http.Request) {
         </div>
 
         <div class="setup-form hidden" id="connectedForm">
-            <button class="button button-danger" onclick="disconnect()">Stop Connection</button>
+            <button class="button button-danger" onclick="disconnect()" data-i18n="stopConnection">Stop Connection</button>
         </div>
 
         <div class="footer">
             © 2025 Tatbeeb Healthcare Technology<br>
-            Version 1.0.0 • Running in system tray
+            <span data-i18n="version">Version 1.0.0 • Running in system tray</span>
         </div>
     </div>
 
     <script>
         let pollingInterval;
+        let currentLang = localStorage.getItem('tatbeebLinkLang') || 'en';
+
+        const translations = {
+            en: {
+                title: 'Tatbeeb Link',
+                subtitle: 'Connect your Database to Tatbeeb HIS',
+                disconnected: 'Disconnected',
+                connected: 'Connected',
+                connecting: 'Connecting to relay...',
+                startConnection: 'Start Connection',
+                stopConnection: 'Stop Connection',
+                advancedSettings: 'Advanced Settings',
+                hideAdvancedSettings: 'Hide Advanced Settings',
+                localPort: 'Local Port to Tunnel',
+                version: 'Version 1.0.0 • Running in system tray',
+                copyLink: 'Copy link',
+                copied: '✅ Copied!',
+                errorInvalidPort: 'Please enter a valid port number (1-65535)',
+                errorConnectionFailed: 'Connection failed: ',
+                errorConnectFailed: 'Connect failed: ',
+                errorDisconnectFailed: 'Disconnect failed: '
+            },
+            ar: {
+                title: 'تطبيب لينك',
+                subtitle: 'ربط قاعدة البيانات بنظام تطبيب الطبي',
+                disconnected: 'غير متصل',
+                connected: 'متصل',
+                connecting: 'جاري الاتصال بالخادم...',
+                startConnection: 'بدء الاتصال',
+                stopConnection: 'إيقاف الاتصال',
+                advancedSettings: 'إعدادات متقدمة',
+                hideAdvancedSettings: 'إخفاء الإعدادات المتقدمة',
+                localPort: 'المنفذ المحلي للنفق',
+                version: 'الإصدار 1.0.0 • يعمل في صينية النظام',
+                copyLink: 'نسخ الرابط',
+                copied: '✅ تم النسخ!',
+                errorInvalidPort: 'الرجاء إدخال رقم منفذ صحيح (1-65535)',
+                errorConnectionFailed: 'فشل الاتصال: ',
+                errorConnectFailed: 'فشل الاتصال: ',
+                errorDisconnectFailed: 'فشل قطع الاتصال: '
+            }
+        };
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('tatbeebLinkLang', lang);
+            
+            // Update UI direction
+            document.body.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+            
+            // Update active button
+            document.getElementById('langEn').classList.toggle('active', lang === 'en');
+            document.getElementById('langAr').classList.toggle('active', lang === 'ar');
+            
+            // Update all translatable elements
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+            
+            // Update copy button title
+            const copyBtn = document.getElementById('copyBtn');
+            if (copyBtn) {
+                copyBtn.setAttribute('title', t('copyLink'));
+            }
+            
+            // Update dynamic status text
+            updateStatus();
+        }
+
+        function t(key) {
+            return translations[currentLang][key] || translations['en'][key] || key;
+        }
+
+        // Initialize language on load
+        document.addEventListener('DOMContentLoaded', function() {
+            setLanguage(currentLang);
+        });
 
         function showError(message) {
             const errorBox = document.getElementById('errorBox');
@@ -439,12 +559,12 @@ func (a *App) handleIndex(w http.ResponseWriter, r *http.Request) {
             const localPort = document.getElementById('localPort').value;
 
             if (!localPort || localPort < 1 || localPort > 65535) {
-                showError('Please enter a valid port number (1-65535)');
+                showError(t('errorInvalidPort'));
                 return;
             }
 
             document.getElementById('connectBtn').disabled = true;
-            document.getElementById('statusText').textContent = 'Connecting to relay...';
+            document.getElementById('statusText').textContent = t('connecting');
 
             try {
                 const response = await fetch('/api/connect', {
@@ -460,11 +580,11 @@ func (a *App) handleIndex(w http.ResponseWriter, r *http.Request) {
                     document.getElementById('connectedForm').classList.remove('hidden');
                     startPolling();
                 } else {
-                    showError('Connection failed: ' + result.error);
+                    showError(t('errorConnectionFailed') + result.error);
                     document.getElementById('connectBtn').disabled = false;
                 }
             } catch (error) {
-                showError('Connect failed: ' + error.message);
+                showError(t('errorConnectFailed') + error.message);
                 document.getElementById('connectBtn').disabled = false;
             }
         }
@@ -478,7 +598,7 @@ func (a *App) handleIndex(w http.ResponseWriter, r *http.Request) {
                 document.getElementById('shareableBox').classList.remove('show');
                 document.getElementById('connectBtn').disabled = false;
             } catch (error) {
-                showError('Disconnect failed: ' + error.message);
+                showError(t('errorDisconnectFailed') + error.message);
             }
         }
 
@@ -495,12 +615,12 @@ func (a *App) handleIndex(w http.ResponseWriter, r *http.Request) {
 
                 if (status.connected) {
                     statusDot.classList.add('connected');
-                    statusText.textContent = status.status || 'Connected';
+                    statusText.textContent = t('connected');
                     shareableLink.textContent = status.shareableLink;
                     shareableBox.classList.add('show');
                 } else {
                     statusDot.classList.remove('connected');
-                    statusText.textContent = status.status || 'Disconnected';
+                    statusText.textContent = t('disconnected');
                     shareableBox.classList.remove('show');
                 }
 
@@ -526,10 +646,9 @@ func (a *App) handleIndex(w http.ResponseWriter, r *http.Request) {
         function copyLink() {
             const link = document.getElementById('shareableLink').textContent;
             navigator.clipboard.writeText(link).then(() => {
-                const btn = event.target;
-                const originalText = btn.textContent;
-                btn.textContent = '✅ Copied!';
-                setTimeout(() => btn.textContent = originalText, 2000);
+                const btn = event.target.closest('button');
+                btn.setAttribute('title', t('copied'));
+                setTimeout(() => btn.setAttribute('title', t('copyLink')), 2000);
             });
         }
 
@@ -538,10 +657,10 @@ func (a *App) handleIndex(w http.ResponseWriter, r *http.Request) {
             const btn = document.getElementById('advancedBtn');
             if (panel.style.display === 'none') {
                 panel.style.display = 'block';
-                btn.textContent = 'Hide Advanced Settings';
+                btn.textContent = t('hideAdvancedSettings');
             } else {
                 panel.style.display = 'none';
-                btn.textContent = 'Advanced Settings';
+                btn.textContent = t('advancedSettings');
             }
         }
 
