@@ -369,7 +369,6 @@ func (a *App) handleIndex(w http.ResponseWriter, r *http.Request) {
         <div class="error" id="errorBox"></div>
 
         <div class="shareable-box" id="shareableBox">
-            <div class="shareable-label">SHAREABLE LINK</div>
             <div class="shareable-link" id="shareableLink"></div>
             <button class="button button-secondary" onclick="copyLink()">Copy Link</button>
         </div>
@@ -389,7 +388,7 @@ func (a *App) handleIndex(w http.ResponseWriter, r *http.Request) {
         </div>
 
         <div class="setup-form hidden" id="connectedForm">
-            <button class="button button-danger" onclick="disconnect()">Stop Tunnel</button>
+            <button class="button button-danger" onclick="disconnect()">Stop Connection</button>
         </div>
 
         <div class="footer">
@@ -537,7 +536,7 @@ func (a *App) handleStatus(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if a.connected {
-		status.Status = "Tunnel Active"
+		status.Status = "Connected"
 	}
 
 	w.Header().Set("Content-Type", "application/json")
