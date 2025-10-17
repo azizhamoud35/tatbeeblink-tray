@@ -1,8 +1,8 @@
 package main
 
 import (
-	_ "embed"
 	"crypto/tls"
+	_ "embed"
 	"encoding/json"
 	"fmt"
 	"io"
