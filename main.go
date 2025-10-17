@@ -491,7 +491,7 @@ func (a *App) handleIndex(w http.ResponseWriter, r *http.Request) {
             },
             ar: {
                 title: 'تطبيب لينك',
-                subtitle: 'ربط قاعدة البيانات بنظام تطبيب الطبي',
+                subtitle: 'ربط قاعدة البيانات بنظام تطبيب HIS',
                 disconnected: 'غير متصل',
                 connected: 'متصل',
                 connecting: 'جاري الاتصال بالخادم...',
